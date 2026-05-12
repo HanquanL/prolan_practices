@@ -71,6 +71,48 @@ class RawArray{
                 return;
             }
 
-            
+            for(int i = size; i > index; i--){
+                data[i] = data[i - 1];
+            }
+
+            data[index] = value;
+            size++;
         }
+
+        void deleteAt(int index){
+            if(index < 0 || index >= size){
+                cout << "Invalid index" << endl;
+                return;
+            }
+
+            for(int i = index; i < size - 1; i++){
+                data[i] = data[i + 1];
+            }
+
+            size--;
+        }
+};
+
+// test
+int main() {
+    RawArray arr;
+
+    arr.append(10);
+    arr.append(20);
+    arr.append(30);
+    arr.printArray();
+
+    arr.insert(1, 15);
+    arr.printArray();
+
+    arr.deleteAt(2);
+    arr.printArray();
+
+    cout << "Index of 15: " << arr.linearSearch(15) << endl;
+    cout << "Element at index 1: " << arr.get(1) << endl;
+
+    arr.set(1, 99);
+    arr.printArray();
+
+    return 0;
 }
