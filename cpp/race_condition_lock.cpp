@@ -12,9 +12,10 @@ mutex mtx;
 
 void worker(){
     for (int i = 0; i < N; i++){
-        //lock_guard<mutex> guard(mtx);    //uncomments this line to test guard
-        
+        //lock_guard<mutex> guard(mtx);    //uncomment this line to test guard
+        //mtx.lock();      //uncomment this line to test lock
         counter++;
+        //mtx.unlock();
     }
 }
 
