@@ -20,4 +20,19 @@ class SinglyLinkedList {
         ~SinglyLinkedList(){
             clear();
         }
+
+        void clear(){
+            Node* current = head;
+            while(current != nullptr){
+                Node* temp = current;
+                current = current -> next;
+                delete temp;
+            }
+
+            head = nullptr;
+        }
+
+        bool isEmpty() const {
+            return head == nullptr;
+        }
 };
