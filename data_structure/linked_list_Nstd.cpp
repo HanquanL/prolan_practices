@@ -35,4 +35,12 @@ class SinglyLinkedList {
         bool isEmpty() const {
             return head == nullptr;
         }
+
+        void insertAtBegining(int value){
+            Node* newNode = new Node(value);
+            newNode -> next = head;
+            head = newNode;
+        }
+
+        void insertAtEnd
 };
