@@ -42,5 +42,34 @@ class SinglyLinkedList {
             head = newNode;
         }
 
-        void insertAtEnd
+        void insertAtEnd(int value){
+            Node* newNode = new Node(value);
+
+            if(head == nullptr){
+                head = newNode;
+                return;
+            }
+
+            Node* current = head;
+            while(current -> next != nullptr){
+                current = current -> next;
+            }
+
+            current -> next = newNode;
+        }
+
+        Node* search(int target) const{
+            Node* current = head;
+
+            while(current != nullptr){
+                if(current -> data == target){
+                    return current;
+                }
+                current = current->next;
+            }
+
+            return nullptr;
+        }
+
+        
 };

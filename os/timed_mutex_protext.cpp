@@ -28,19 +28,37 @@ class WaitingVehicles{
         }
 
         // a vehicle is moved into the vector using an rvalue reference. 
-        void pushBakc(Vehicle &&v){
-            //_vehicles.push_back(std::move(v)); // data race would cause an exception
-            //int oldNum = _tmpVehicles;
-            _mtx.lock();
-            _vehicles.push_back(std::move(v));
-            //this_thread::sleep_for(chrono::milliseconds(1));
-            //_tmpVehicles = oldNum + 1;
-            _mtx.unlock();
+        // void pushBack(Vehicle &&v){
+        //     //_vehicles.push_back(std::move(v)); // data race would cause an exception
+        //     //int oldNum = _tmpVehicles;
+        //     _mtx.lock();
+        //     _vehicles.push_back(std::move(v));
+        //     //this_thread::sleep_for(chrono::milliseconds(1));
+        //     //_tmpVehicles = oldNum + 1;
+        //     _mtx.unlock();
+        // }
+        
+        //Using timed_mutex
+        void pushBack(Vehicle &&v){
+            for(size_t i = 0; i < 3; i++){
+                if(_mtx.try_lock_for(chrono::milliseconds(100))){
+                    _vehicles.emplace_back(move(v));
+
+                    _mtx.unlock();
+                    break;
+                }else{
+                    cout << "Error! Vehicle #" << v.getID() << " could not be added to the vector" << endl;
+                    this_thread::sleep_for(chrono::milliseconds(100));
+                }
+            }
         }
     private:
         vector<Vehicle> _vehicles;
         //int _tmpVehicles;
-        mutex _mtx;
+        //mutex _mtx;
+        
+        //Using timed_mtx
+        timed_mutex _mtx;
 };
 
 int main(){
@@ -49,7 +67,7 @@ int main(){
     for (int i = 0; i < 1000; i++){
         Vehicle v(i);
                                                   // why pass a method use reference?
-        futures.emplace_back(async(launch::async, &WaitingVehicles::pushBakc, queue, move(v)));
+        futures.emplace_back(async(launch::async, &WaitingVehicles::pushBack, queue, move(v)));
     }
 
     for_each(futures.begin(), futures.end(), [](future<void> &ftr){
