@@ -18,6 +18,25 @@ class DoublyLinkedList{
     
     public:
         DoublyLinkedList() : head(nullptr), tail(nullptr), count(0){}
+        
+        //copy constructor
+        DoublyLinkedList(const DoublyLinkedList& other) : head(nullptr), tail(nullptr), count(0){
+            for(Node* current = other.head; current != nullptr ; current = current -> next){
+                push_back(current -> data);
+            }
+        }
+
+        //copy assignment operator
+        DoublyLinkedList& operator=(const DoublyLinkedList& other){
+            if(this == &other){
+                return *this;    // guard against: a = a;
+            }
+            clear();
+            for(Node* current = other.head; current != nullptr; current = current -> next){
+                push_back(current -> data);
+            }
+            return *this;
+        }
         ~DoublyLinkedList() { clear(); }
 
         void push_front(const T& value){
